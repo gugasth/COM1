@@ -6,7 +6,9 @@ pkg load communications;
 info = '0001100001011100';
 
 % Frequência da portadora
-Fp = 1000;
+Fc = 2000;
+Fs = 10000; % Taxa de amostragem
+T = 1/Fs;   % Período de amostragem
 
 % Número de bits em cada grupo
 grupo_bits = 4;
@@ -76,7 +78,7 @@ title('Sinal Modulado (Parte Imaginária) 16-QAM');
 grid on;
 
 % Definir frequência angular da portadora
-w0 = 2 * pi * (Fp);
+w0 = 2 * pi * (Fc);
 
 % Multiplicar sinal modulado pela portadora
 parte_real_cos = sinal_modulado_real .* cos(w0 * t);
@@ -105,3 +107,67 @@ ylabel('Amplitude');
 title('Sinal resutante');
 grid on;
 
+% Separar em parte real e imaginária
+s_I = sinal_modulado_cos_sin .* cos(w0 * t);
+s_Q = sinal_modulado_cos_sin .* (-sin(w0 * t));
+
+figure(3);
+subplot(311)
+plot(t, s_I, 'b', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Amplitude');
+title('Parte real multiplicada por cos(w0t');
+grid on;
+
+subplot(312)
+plot(t, s_Q, 'b', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Amplitude');
+title('Parte imaginária multiplicada por -sin(w0t)');
+grid on;
+
+
+% Filtros passa-baixa
+order = 6;
+cutoff = 0.1 * (Fs / 2);
+[b, a] = butter(order, cutoff / (Fs / 2), 'low');
+r_I = filter(b, a, s_I);
+r_Q = filter(b, a, s_Q);
+
+figure(4);
+subplot(311)
+plot(t, r_I, 'b', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Amplitude');
+title('Parte real multiplicada por cos(w0t');
+grid on;
+
+subplot(312)
+plot(t, r_Q, 'b', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Amplitude');
+title('Parte imaginária multiplicada por -sin(w0t)');
+grid on;
+
+% Downsampling
+downsample_factor = round(T_s / T_amostra);
+I_downsampled = downsample(r_I, downsample_factor);
+Q_downsampled = downsample(r_Q, downsample_factor);
+
+% Decodificação dos dados
+% Combine I e Q para formar os símbolos complexos
+info_complexa_demod = I_downsampled + 1i * Q_downsampled;
+
+% Demodulação QAM
+decimais_demodulados = qamdemod(info_complexa_demod, M);
+
+% Converter de volta para bits
+info_demodulado = dec2bin(decimais_demodulados, grupo_bits);
+
+% Concatenar os bits
+info_recuperado = reshape(info_demodulado', 1, []);
+info_recuperado = info_recuperado(1:length(info));  % Ajustar o comprimento para o original
+
+% Exibir resultados
+disp(['Informações originais: ', info]);
+disp(['Informações recebidas: ', info_recuperado]);
