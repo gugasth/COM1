@@ -50,6 +50,13 @@ t = 0:T_amostra:num_periodos*T_s-T_amostra;
 sinal_modulado_real = zeros(size(t));
 sinal_modulado_imaginario = zeros(size(t));
 
+fator_upsample = 1;
+
+% Upsample
+sinal_modulado_real_upsampled = interp(sinal_modulado_real, fator_upsample);
+sinal_modulado_imaginario_upsampled = interp(sinal_modulado_imaginario, fator_upsample);
+
+
 % Mapeamento para sinal modulado (parte real e parte imaginária)
 for i = 1:length(parte_real)
     indice_inicio = (i - 1) * round(T_s / T_amostra) + 1;
@@ -83,29 +90,32 @@ w0 = 2 * pi * (Fc);
 % Multiplicar sinal modulado pela portadora
 parte_real_cos = sinal_modulado_real .* cos(w0 * t);
 parte_imaginaria_sen = sinal_modulado_imaginario .* (-sin(w0 * t));
-sinal_modulado_cos_sin = parte_real_cos + parte_imaginaria_sen
+sinal_modulado_cos_sin = parte_real_cos + parte_imaginaria_sen;
+
 % Plotar o sinal modulado no tempo
 figure(2);
 subplot(311)
 plot(t, parte_real_cos, 'b', 'LineWidth', 2);
 xlabel('Tempo');
 ylabel('Amplitude');
-title('Parte real multiplicada por cos(w0t');
+title('Parte real após multiplicar por cos(w0t');
 grid on;
 
 subplot(312)
 plot(t, parte_imaginaria_sen, 'b', 'LineWidth', 2);
 xlabel('Tempo');
 ylabel('Amplitude');
-title('Parte imaginária multiplicada por -sin(w0t)');
+title('Parte imaginária após multiplicar por -sin(w0t)');
 grid on;
 
 subplot(313)
 plot(t, sinal_modulado_cos_sin, 'b', 'LineWidth', 2);
 xlabel('Tempo');
 ylabel('Amplitude');
-title('Sinal resutante');
+title('Sinal transmitido');
 grid on;
+
+% ----------- Demodulação -----------
 
 % Separar em parte real e imaginária
 s_I = sinal_modulado_cos_sin .* cos(w0 * t);
@@ -147,6 +157,15 @@ plot(t, r_Q, 'b', 'LineWidth', 2);
 xlabel('Tempo');
 ylabel('Amplitude');
 title('Parte imaginária multiplicada por -sin(w0t)');
+grid on;
+
+y_t = r_I + r_Q;
+subplot(313)
+plot(t, y_t, 'b', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Amplitude');
+ylim([-6 6])
+title('Sinal recebido');
 grid on;
 
 % Downsampling
