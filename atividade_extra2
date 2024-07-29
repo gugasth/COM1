@@ -1,0 +1,37 @@
+1) a - 
+
+em relação a forma de onda do sinal transmitido:
+fator de rolloff maior, diminui a interferência inter-simbólica mas aumenta a largura de banda do sinal.
+
+
+em relação a densidade espectral de potência:
+fator de rolloff grande deixa a distribuição de energia mais uniforme, 
+fator de rolloff pequeno, deixa a energia mais no centro do espectro.
+
+b) se a taxa de amostragem for muito baixa perde a característica do sinal,
+   se a taxa de amostragem for muito alta, gasta recursos computacionais atoa.
+Uma taxa de amostragem inadequada pode levar à interferência inter-simbólica, onde os símbolos adjacentes se sobrepõem devido à largura de pulso inadequada do filtro cosseno levantado.
+Uma taxa de amostragem mais alta permite uma representação mais precisa dos símbolos individuais, reduzindo assim a interferência inter-simbólica e melhorando a qualidade da transmissão.
+
+2) a-
+
+Um filtro casado é projetado para maximizar a relação sinal-ruído na detecção de sinais. Ele minimiza a interferência entre os símbolos transmitidos. Ele filtra o sinal recebido de modo a maximizar a energia do sinal desejado e minimizar a interferência dos símbolos adjacentes e do ruído, melhorando assim a precisão da detecção.
+
+
+b)
+
+Vantagens: Aumentar o número de níveis em M-PAM aumenta a capacidade de transmissão de dados por símbolo, o que pode levar a uma maior eficiência espectral. Isso significa que mais informações podem ser transmitidas em um determinado intervalo de tempo, aumentando assim a taxa de transmissão.
+Desvantagens: Aumentar o número de níveis em M-PAM pode tornar o sistema mais suscetível a erros de detecção devido ao aumento da interferência entre os símbolos. Além disso, pode aumentar os requisitos de potência e sensibilidade do receptor, tornando o sistema mais suscetível a distorções e ruído.
+
+
+c) é a mesma pergunta da letra a.
+
+
+d)
+O Pulso Ideal de Nyquist é um pulso que satisfaz o Critério de Nyquist para evitar a interferência inter-simbólica. Ele tem a propriedade de não causarinterferência intersimbólica.
+Suas principais propriedades incluem ter uma duração finita no tempo, ter uma forma de onda que se anula fora do intervalo de símbolo e satisfazer o Critério de Nyquist.
+
+
+e)
+
+ISI é a interferência causada pela sobreposição dos símbolos adjacentes em um canal de comunicação. Ela ocorre quando o sinal transmitido se espalha no tempo e se sobrepõe a símbolos adjacentes, resultando em uma distorção do sinal recebido.
