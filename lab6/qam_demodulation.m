@@ -45,6 +45,8 @@ info_Q = imag(info_complexa);
 info_I_up = upsample(info_I,N);
 info_Q_up = upsample(info_Q,N);
 
+
+
 filtro_tx = ones(1,N);
 sinal_I = filter (filtro_tx, 1, info_I_up) ;
 sinal_Q = filter (filtro_tx, 1, info_Q_up);
@@ -56,7 +58,31 @@ sinal_I = sinal_I' .* Portadora_I;
 sinal_Q = sinal_Q' .* Portadora_Q;
 
 sinal_TX = sinal_I - sinal_Q;
+figure(1)
 
+plot(info)
+xlim([0 100])
+ylim([0 15])
+title('Sinal de informação')
+
+figure(2)
+subplot(311)
+plot(sinal_I)
+xlim([0 100])
+ylim([-3 3])
+title('Sinal I')
+
+subplot(312)
+plot(sinal_Q)
+xlim([0 100])
+ylim([-3 3])
+title('Sinal Q')
+
+subplot(313)
+plot(sinal_TX)
+xlim([0 100])
+ylim([-3 3])
+title('Sinal transmitido')
 % --- Demodulação ---
 
 %% Recepção do sinal
@@ -70,12 +96,6 @@ sinal_RX_Q = sinal_RX.*-Portadora_Q;
 
 sinal_Rx_filtrado_I = filter ( filtro_rx ,1, sinal_RX_I)/N;
 sinal_Rx_filtrado_Q = filter ( filtro_rx ,1, sinal_RX_Q)/N;
-
-f5 = scatterplot ( sinal_Rx_filtrado_I (N:N:end).*2);
-title ('Sinal PAM filtrado (fase)')
-
-f6 = scatterplot (sinal_Rx_filtrado_Q(N:N:end).*2);
-title ('Sinal PAM filtrado (quadratura)')
 
 sinal_16Qam_PLOT = sinal_Rx_filtrado_I(N:N:end).*2 + j*(sinal_Rx_filtrado_Q(N:N:end).*2);
 f7 = scatterplot (sinal_16Qam_PLOT);
@@ -92,4 +112,16 @@ info_Rx = qamdemod(info_Rx, 16);
 bits_Rx = reshape(de2bi(info_Rx),[num_bits/k,k]);
 
 decimais_recebidos = bi2de(bits_Rx);
+figure(6)
+subplot(211)
+plot(decimais_recebidos)
+xlim([0 100])
+ylim([0 15])
+title('Sinal capturado')
+
+subplot(212)
+plot(info)
+xlim([0 100])
+ylim([0 15])
+title('Relembrando como era o sinal de informação original')
 
