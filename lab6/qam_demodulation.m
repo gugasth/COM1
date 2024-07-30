@@ -58,14 +58,13 @@ sinal_I = sinal_I' .* Portadora_I;
 sinal_Q = sinal_Q' .* Portadora_Q;
 
 sinal_TX = sinal_I - sinal_Q;
-figure(1)
-
+figure()
 plot(info)
 xlim([0 100])
 ylim([0 15])
 title('Sinal de informação')
 
-figure(2)
+figure()
 subplot(311)
 plot(sinal_I)
 xlim([0 100])
@@ -112,7 +111,7 @@ info_Rx = qamdemod(info_Rx, 16);
 bits_Rx = reshape(de2bi(info_Rx),[num_bits/k,k]);
 
 decimais_recebidos = bi2de(bits_Rx);
-figure(6)
+figure()
 subplot(211)
 plot(decimais_recebidos)
 xlim([0 100])
